@@ -1,0 +1,19 @@
+{
+  "name": "challenge-ml-backend",
+  "version": "1.0.0",
+  "description": "Backend for Meli challenge",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rodrivel/challenge-ml-backend.git"
+  },
+  "author": "Rodrigo Velazquez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rodrivel/challenge-ml-backend/issues"
+  },
+  "homepage": "https://github.com/rodrivel/challenge-ml-backend#readme"
+}
