@@ -4,6 +4,7 @@
   "description": "Backend for Meli challenge",
   "main": "app.js",
   "scripts": {
+    "start": "nodemon --exec babel-node src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/rodrivel/challenge-ml-backend/issues"
   },
-  "homepage": "https://github.com/rodrivel/challenge-ml-backend#readme"
+  "homepage": "https://github.com/rodrivel/challenge-ml-backend#readme",
+  "devDependencies": {
+    "@babel/core": "^7.13.10",
+    "@babel/node": "^7.13.10",
+    "@babel/preset-env": "^7.13.10",
+    "nodemon": "^2.0.7"
+  }
 }
