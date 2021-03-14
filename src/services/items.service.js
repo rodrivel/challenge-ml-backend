@@ -1,24 +1,49 @@
-import { rejects } from 'assert';
 import axios from 'axios';
-import { resolve } from 'path';
 const API_MAX_RESULTS = 4;
 
 class ResponseService {
-    static successfulResponse(payload) {
-        // let responseObject = {
-        //     "author" : {
-        //         "name" : "Rodrigo",
-        //         "lastname": "Velazquez"
-        //     }   ,
-        //     "categories" : [],
-        //     "items" : []        
-        // }
-        return { message : 'SUCCESS', ...payload}        
+    static success(payload) {                
+        return createResponseObject(payload);
     }
 
-    static serviceUnavailable() {
-        return { message : 'SERVICE_UNAVAILABLE' }
+    static apiUnavailable() {
+        return { message : 'SERVICE_UNAVAILABLE' };
     }
+}
+
+const createResponseObject = (payload) => {
+    let responseObject = {
+        "author" : {
+            "name" : "Rodrigo",
+            "lastname": "Velazquez"
+        }        
+    };
+    let items = [];
+    let categories = [];
+
+    let category_filter = payload.filters?.find(fObj => fObj.id === 'category');    
+    if (category_filter)
+        categories = category_filter.values[0]?.path_from_root?.map(pfr => pfr.name);
+        
+    items = payload.results?.map(r => {
+        let priceAmount = Number.parseFloat(r.price);
+        return {
+            "id": r.id || "",
+            "title": r.title || "",
+            "price" : {
+                "currency": r.currency_id || "",
+                "amount" : priceAmount,
+                "decimals" : priceAmount - Math.floor(priceAmount)                 
+            },
+            "picture": r.thumbnail,
+            "condition": r.condition,
+            "free_shipping": r.shipping?.free_shipping || false
+        };
+    });
+    
+    responseObject.categories = categories;
+    responseObject.items = items;
+    return responseObject;
 }
 
 const getItemsService = (q) => {
