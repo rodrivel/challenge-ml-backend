@@ -6,8 +6,8 @@ class ResponseService {
         return createResponseObject(action, payload);
     }
 
-    static apiUnavailable() {
-        return { message : 'SERVICE_UNAVAILABLE' };
+    static unavailable() {
+        return { message : 'MELI_SERVICE_UNAVAILABLE_OR_WITH_ERRORS' };
     }
 }
 
@@ -37,10 +37,10 @@ const createResponseObject = (action, payload) => {
             break;
 
         case 'get':
-            let item = getItemDataHelper(payload);
-            item.sold_quantity = payload.sold_quantity;            
-            responseObject.item = { ...item };
-            // handle description
+            let item = getItemData(payload);        
+            item.sold_quantity = payload.sold_quantity;
+            item.description = payload.description;
+            responseObject.item = { ...item };            
             break;
 
         default:
@@ -51,7 +51,7 @@ const createResponseObject = (action, payload) => {
     return responseObject;
 }
 
-const getItemDataHelper = (item) => {
+const getItemData = (item) => {
     let priceAmount = Number.parseFloat(item.price);
     return {
         "id": item.id || "",
@@ -69,22 +69,31 @@ const getItemDataHelper = (item) => {
 
 const listItemsService = (q) => {
     return axios.get(`https://api.mercadolibre.com/sites/MLA/search?q=${q}&limit=${GET_ITEMS_API_MAX_RESULTS || 50}`)
-        .then(response => {                        
+        .then(response => {
             return response.data;
         })
-        .catch(error => {            
+        .catch(error => {
             throw error;
         });
 }
 
 const getItemService = (id) => {
-    return axios.get(`https://api.mercadolibre.com/items/${id}`)
-        .then(response => {                        
-            return response.data;
-        })
-        .catch(error => {            
-            throw error;
-        });
+
+    const requestItem = axios.get(`https://api.mercadolibre.com/items/${id}`);
+    const requestItemDescription = axios.get(`https://api.mercadolibre.com/items/${id}/description/`);
+
+    return axios.all([requestItem, requestItemDescription]).then(axios.spread((...responses) => {
+        const responseItem = responses[0];
+        const responseItemDescription = responses[1];        
+        const dataWithDescription = {
+            ...responseItem.data,
+            description: responseItemDescription.data.plain_text
+        }
+        return dataWithDescription;
+
+    })).catch(errors => {
+        throw error;
+    });    
 }
 
 export {
