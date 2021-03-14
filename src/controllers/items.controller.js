@@ -1,5 +1,5 @@
 import { validationResult } from 'express-validator';
-import { listItemsService, ResponseService } from '../services/items.service';
+import { listItemsService, getItemService, ResponseService } from '../services/items.service';
 
 const listItemsController = (req, res) => {
     
@@ -13,13 +13,33 @@ const listItemsController = (req, res) => {
     
     apiResponse
         .then(data => {        
-            return res.json(ResponseService.success(data));        
+            return res.json(ResponseService.success('list', data));        
         })
         .catch(error => {        
             return res.status(503).json(ResponseService.apiUnavailable());
         });    
 }
 
+const getItemController = (req, res) => {
+    
+    const errors = validationResult(req);
+    
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+    };
+    
+    let apiResponse = getItemService(req.params.id);
+    
+    apiResponse
+        .then(data => {            
+            return res.json(ResponseService.success('get', data));
+        })
+        .catch(error => {                    
+            return res.status(503).json(ResponseService.apiUnavailable());
+        });    
+}
+
 export {
-    listItemsController    
+    listItemsController,
+    getItemController
 }
