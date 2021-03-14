@@ -2,7 +2,11 @@ import { validationResult } from 'express-validator';
 import { listItemsService, getItemService, ResponseService } from '../services/items.service';
 
 const listItemsController = (req, res) => {
-    
+    /*  
+        #swagger.tags = ['Items']
+        #swagger.description = 'Endpoint to search for Mercadolibre items.' 
+    */
+        
     const errors = validationResult(req);
     
     if (!errors.isEmpty()) {
@@ -13,7 +17,7 @@ const listItemsController = (req, res) => {
     
     apiResponse
         .then(data => {          
-            return res.json(ResponseService.success('list', data));
+            return res.status(200).json(ResponseService.success('list', data));
         })
         .catch(error => {                    
             return res.status(204).json(ResponseService.unavailable());
@@ -21,7 +25,11 @@ const listItemsController = (req, res) => {
 }
 
 const getItemController = (req, res) => {
-    
+    /*  
+        #swagger.tags = ['Items']
+        #swagger.description = 'Endpoint get an item by id.' 
+    */
+
     const errors = validationResult(req);
     
     if (!errors.isEmpty()) {
@@ -32,7 +40,7 @@ const getItemController = (req, res) => {
     
     apiResponse
         .then(data => {            
-            return res.json(ResponseService.success('get', data));
+            return res.status(200).json(ResponseService.success('get', data));
         })
         .catch(error => {                    
             return res.status(204).json(ResponseService.unavailable());

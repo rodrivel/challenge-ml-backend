@@ -6,6 +6,8 @@ import bodyParser from 'body-parser';
 import itemsRoutes from './routes/items.route';
 import rateLimit from 'express-rate-limit';
 import compression from 'compression';
+import * as swaggerUi from 'swagger-ui-express';
+import swaggerDocument from '../docs/swagger-output.json';
 
 // configure api request limit
 const limiter = rateLimit({
@@ -17,6 +19,7 @@ const limiter = rateLimit({
   });
   
 const app = express();
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // helmet middleware for improved security
 app.use(helmet());
