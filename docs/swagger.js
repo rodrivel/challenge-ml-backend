@@ -5,10 +5,10 @@ const doc = {
         title: "API Docs",
         description: "Description"
     },
-    host: "localhost:5000"
+    host: `localhost:${process.env.PORT || 5000}`
 }
 
-const outputFile = './swagger-output.json';
+const outputFile = './docs/swagger-output.json';
 const endpointsFiles = ['./src/app.js'];
 
 swaggerAutogen(outputFile, endpointsFiles, doc);
