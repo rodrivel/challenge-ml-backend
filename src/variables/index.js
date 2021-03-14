@@ -1,0 +1,1 @@
+export const GET_ITEMS_API_MAX_RESULTS = 4;

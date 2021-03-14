@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_MAX_RESULTS = 4;
+import { GET_ITEMS_API_MAX_RESULTS } from '../variables/';
 
 class ResponseService {
     static success(payload) {                
@@ -46,8 +46,8 @@ const createResponseObject = (payload) => {
     return responseObject;
 }
 
-const getItemsService = (q) => {
-    return axios.get(`https://api.mercadolibre.com/sites/MLA/search?q=${q}&limit=${API_MAX_RESULTS || 50}`)
+const listItemsService = (q) => {
+    return axios.get(`https://api.mercadolibre.com/sites/MLA/search?q=${q}&limit=${GET_ITEMS_API_MAX_RESULTS || 50}`)
         .then(response => {                        
             return response.data;
         })
@@ -57,6 +57,6 @@ const getItemsService = (q) => {
 }
 
 export {
-    getItemsService,
+    listItemsService,
     ResponseService
 }
