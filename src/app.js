@@ -5,8 +5,9 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import itemsRoutes from './routes/items.route';
 import rateLimit from 'express-rate-limit';
+import compression from 'compression';
 
-
+// configure api request limit
 const limiter = rateLimit({
     windowMs: 60000,
     max: process.env.CALL_PER_MINUTE || 60,
@@ -16,10 +17,22 @@ const limiter = rateLimit({
   });
   
 const app = express();
+
+// helmet middleware for improved security
 app.use(helmet());
 app.use(helmet.hidePoweredBy());
+app.use(helmet.xssFilter());
+
+// enable gzip compression
+app.use(compression());
+
+// enable cors 
 app.use(cors());
+
+// ensure json format for body
 app.use(bodyParser.json());
+
+// routing
 app.use('/api/items', limiter, itemsRoutes);
 
 
