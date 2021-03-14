@@ -35,8 +35,8 @@ const createResponseObject = (payload) => {
                 "amount" : priceAmount,
                 "decimals" : priceAmount - Math.floor(priceAmount)                 
             },
-            "picture": r.thumbnail,
-            "condition": r.condition,
+            "picture": r.thumbnail || "",
+            "condition": r.condition || "",
             "free_shipping": r.shipping?.free_shipping || false
         };
     });
@@ -47,13 +47,13 @@ const createResponseObject = (payload) => {
 }
 
 const getItemsService = (q) => {
-    return axios.get(`https://api.mercadolibre.com/sites/MLA/search?q=${q}&limit=${API_MAX_RESULTS}`)
+    return axios.get(`https://api.mercadolibre.com/sites/MLA/search?q=${q}&limit=${API_MAX_RESULTS || 50}`)
         .then(response => {                        
             return response.data;
         })
         .catch(error => {            
             throw error;
-        });  
+        });
 }
 
 export {
