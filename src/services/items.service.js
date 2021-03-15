@@ -29,7 +29,7 @@ const createResponseObject = (action, payload) => {
                 categories = category_filter.values[0]?.path_from_root?.map(pfr => pfr.name);
                 
             items = payload.results?.map(r => {
-                return getItemData(r);        
+                return getItemData(r);
             });
             
             responseObject.categories = categories;
@@ -45,9 +45,7 @@ const createResponseObject = (action, payload) => {
 
         default:
             break;
-    }
-    
-    
+    }    
     return responseObject;
 }
 
@@ -99,5 +97,6 @@ const getItemService = (id) => {
 export {
     listItemsService,
     getItemService,
-    ResponseService
+    ResponseService,
+    createResponseObject
 }
