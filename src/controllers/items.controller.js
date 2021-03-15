@@ -44,7 +44,7 @@ const getItemController = (req, res) => {
         })
         .catch(error => {                    
             return res.status(204).json(ResponseService.unavailable());
-        });    
+        });
 }
 
 export {

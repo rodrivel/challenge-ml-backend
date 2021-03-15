@@ -38,7 +38,4 @@ app.use(bodyParser.json());
 // routing
 app.use('/api/items', limiter, itemsRoutes);
 
-
-app.listen(process.env.PORT || 5000, ()=> {
-    console.log(`App listening on port ${process.env.PORT || 5000 }`);
-});
+export default app;
