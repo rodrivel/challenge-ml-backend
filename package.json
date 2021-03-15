@@ -4,7 +4,9 @@
   "description": "Backend for Meli challenge",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon --exec babel-node src/server.js",
+    "start": "node dist/server.js",
+    "dev": "nodemon --exec babel-node src/server.js",
+    "build": "./node_modules/.bin/babel src --out-dir dist --presets=@babel/env",
     "test": "jest --collect-coverage",
     "swagger-autogen": "node ./docs/swagger.js"
   },
@@ -19,6 +21,7 @@
   },
   "homepage": "https://github.com/rodrivel/challenge-ml-backend#readme",
   "devDependencies": {
+    "@babel/cli": "^7.13.10",
     "@babel/core": "^7.13.10",
     "@babel/node": "^7.13.10",
     "@babel/preset-env": "^7.13.10",
