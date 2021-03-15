@@ -4,7 +4,7 @@ import { listItemsService, getItemService, ResponseService } from '../services/i
 const listItemsController = (req, res) => {
     /*  
         #swagger.tags = ['Items']
-        #swagger.description = 'Endpoint to search for Mercadolibre items.' 
+        #swagger.description = 'Endpoint for searching Mercadolibre items.' 
     */
         
     const errors = validationResult(req);
@@ -20,14 +20,14 @@ const listItemsController = (req, res) => {
             return res.status(200).json(ResponseService.success('list', data));
         })
         .catch(error => {                    
-            return res.status(204).json(ResponseService.unavailable());
-        });    
+            return res.status(502).json(ResponseService.unavailable());
+        });
 }
 
 const getItemController = (req, res) => {
     /*  
         #swagger.tags = ['Items']
-        #swagger.description = 'Endpoint get an item by id.' 
+        #swagger.description = 'Endpoint for getting an item by id.' 
     */
 
     const errors = validationResult(req);
@@ -43,7 +43,7 @@ const getItemController = (req, res) => {
             return res.status(200).json(ResponseService.success('get', data));
         })
         .catch(error => {                    
-            return res.status(204).json(ResponseService.unavailable());
+            return res.status(502).json(ResponseService.unavailable());
         });
 }
 
