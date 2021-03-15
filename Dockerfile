@@ -9,4 +9,4 @@ RUN npm install --production
 
 COPY . .
 
-CMD [ "node", "src/server.js" ]
+CMD [ "node", "dist/server.js" ]
