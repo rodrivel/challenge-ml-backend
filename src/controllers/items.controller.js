@@ -9,10 +9,12 @@ const listItemsController = (req, res) => {
         
     const errors = validationResult(req);
     
+    // if request validation has errors, return bad request
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     };
 
+    // 
     let apiResponse = listItemsService(req.query.q);    
     
     apiResponse
@@ -32,6 +34,7 @@ const getItemController = (req, res) => {
 
     const errors = validationResult(req);
     
+    // if request validation has errors, return bad request
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     };

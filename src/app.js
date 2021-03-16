@@ -17,9 +17,9 @@ const limiter = rateLimit({
       error: "Too many requests"
     }
   });
-  
+
+
 const app = express();
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // helmet middleware for improved security
 app.use(helmet());
@@ -35,7 +35,10 @@ app.use(cors());
 // ensure json format for body
 app.use(bodyParser.json());
 
+// serve swagger docs 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // routing
+
 app.use('/api/items', limiter, itemsRoutes);
 
 export default app;

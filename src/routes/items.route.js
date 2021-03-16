@@ -4,6 +4,7 @@ import { listItemsValidator, getItemValidator } from '../validations/items.valid
 
 const router = express.Router();
 
+// define API routes
 router.get('/:id', getItemValidator, getItemController);
 router.get('', listItemsValidator, listItemsController);
 
