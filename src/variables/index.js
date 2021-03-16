@@ -1,1 +1,2 @@
 export const GET_ITEMS_API_MAX_RESULTS = 4;
+export const MAX_API_REQUESTS_PER_MINUTE = 60;

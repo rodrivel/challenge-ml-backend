@@ -1,56 +1,42 @@
 import { validationResult } from 'express-validator';
 import { listItemsService, getItemService, ResponseService } from '../services/items.service';
 
-const listItemsController = (req, res) => {
-    /*  
+export const listItemsController = async (req, res) => {
+  /*
         #swagger.tags = ['Items']
-        #swagger.description = 'Endpoint for searching Mercadolibre items.' 
-    */
-        
-    const errors = validationResult(req);
-    
-    // if request validation has errors, return bad request
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    };
+        #swagger.description = 'Endpoint for searching Mercadolibre items.'
+  */
 
-    // 
-    let apiResponse = listItemsService(req.query.q);    
-    
-    apiResponse
-        .then(data => {          
-            return res.status(200).json(ResponseService.success('list', data));
-        })
-        .catch(error => {                    
-            return res.status(502).json(ResponseService.unavailable());
-        });
-}
+  const errors = validationResult(req);
 
-const getItemController = (req, res) => {
-    /*  
-        #swagger.tags = ['Items']
-        #swagger.description = 'Endpoint for getting an item by id.' 
-    */
+  // if request validation has errors, return bad request
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
 
-    const errors = validationResult(req);
-    
-    // if request validation has errors, return bad request
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    };
-    
-    let apiResponse = getItemService(req.params.id);
-    
-    apiResponse
-        .then(data => {            
-            return res.status(200).json(ResponseService.success('get', data));
-        })
-        .catch(error => {                    
-            return res.status(502).json(ResponseService.unavailable());
-        });
-}
+  const { responseStatus, responseJson } = await listItemsService(req.query.q)
+    .then((data) => ({ responseStatus: 200, responseJson: ResponseService.success('list', data) }))
+    .catch(() => ({ responseStatus: 502, responseJson: ResponseService.unavailable() }));
 
-export {
-    listItemsController,
-    getItemController
-}
+  return res.status(responseStatus).json(responseJson);
+};
+
+export const getItemController = async (req, res) => {
+  /*
+    #swagger.tags = ['Items']
+    #swagger.description = 'Endpoint for getting an item by id.'
+  */
+
+  const errors = validationResult(req);
+
+  // if request validation has errors, return bad request
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { responseStatus, responseJson } = await getItemService(req.params.id)
+    .then((data) => ({ responseStatus: 200, responseJson: ResponseService.success('get', data) }))
+    .catch(() => ({ responseStatus: 502, responseJson: ResponseService.unavailable() }));
+
+  return res.status(responseStatus).json(responseJson);
+};
