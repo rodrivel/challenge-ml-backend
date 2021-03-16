@@ -9,6 +9,8 @@ There are two ways of running the application.
 - conteinerized with docker.
 - locally with nodejs.
 
+The default port in both cases is 5000, so once the app is running you will be able to find it in your browser at localhost:5000.
+
 ### Docker
 
 You'll need to have docker installed on your machine.
