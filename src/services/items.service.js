@@ -1,7 +1,22 @@
 import axios from 'axios';
 import { GET_ITEMS_API_MAX_RESULTS } from '../variables';
 
-const proccessThumbnail = (thumbnail) => (thumbnail ? thumbnail.replace(/(-[A-Z])(\.\w{3,4})$/, '-B$2') : null);
+const proccessThumbnail = (thumbnail) => (thumbnail ? thumbnail.replace(/(-[A-Z])(\.\w{3,4})$/, '-C$2') : null);
+const proccessItemCondition = (itemCondition) => {
+  let res;
+  switch (itemCondition) {
+    case 'new':
+      res = 'Nuevo';
+      break;
+    case 'used':
+      res = 'Usado';
+      break;
+    default:
+      res = null;
+  }
+  return res;
+};
+
 const getItemData = (item, action) => {
   const priceInteger = parseInt(item.price, 10);
   const priceDecimalPart = (parseFloat(item.price) - Math.floor(item.price)).toFixed(2) * 100;
@@ -18,7 +33,7 @@ const getItemData = (item, action) => {
           decimals: priceDecimalPart,
         },
         pictures: item.pictures || {},
-        condition: item.condition || '',
+        condition: proccessItemCondition(item.condition) || '',
         free_shipping: item.shipping?.free_shipping || false,
         sold_quantity: item.sold_quantity,
         description: item.description,
@@ -36,7 +51,7 @@ const getItemData = (item, action) => {
           decimals: priceDecimalPart,
         },
         picture: proccessThumbnail(item.thumbnail) || '',
-        condition: item.condition || '',
+        condition: proccessItemCondition(item.condition) || '',
         free_shipping: item.shipping?.free_shipping || false,
       };
       break;
