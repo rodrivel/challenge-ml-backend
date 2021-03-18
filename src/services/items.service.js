@@ -53,6 +53,7 @@ const getItemData = (item, action) => {
         picture: proccessThumbnail(item.thumbnail) || '',
         condition: proccessItemCondition(item.condition) || '',
         free_shipping: item.shipping?.free_shipping || false,
+        address: item.address || null,
       };
       break;
 
