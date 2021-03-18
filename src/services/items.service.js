@@ -1,20 +1,50 @@
 import axios from 'axios';
 import { GET_ITEMS_API_MAX_RESULTS } from '../variables';
 
-const getItemData = (item) => {
-  const priceAmount = Number.parseFloat(item.price);
-  return {
-    id: item.id || '',
-    title: item.title || '',
-    price: {
-      currency: item.currency_id || '',
-      amount: priceAmount,
-      decimals: priceAmount - Math.floor(priceAmount),
-    },
-    picture: item.thumbnail || '',
-    condition: item.condition || '',
-    free_shipping: item.shipping?.free_shipping || false,
-  };
+const proccessThumbnail = (thumbnail) => (thumbnail ? thumbnail.replace(/(-[A-Z])(\.\w{3,4})$/, '-B$2') : null);
+const getItemData = (item, action) => {
+  const priceInteger = parseInt(item.price, 10);
+  const priceDecimalPart = (parseFloat(item.price) - Math.floor(item.price)).toFixed(2) * 100;
+  let itemAux = {};
+
+  switch (action) {
+    case 'get':
+      itemAux = {
+        id: item.id || '',
+        title: item.title || '',
+        price: {
+          currency: item.currency_id || '',
+          amount: priceInteger,
+          decimals: priceDecimalPart,
+        },
+        pictures: item.pictures || {},
+        condition: item.condition || '',
+        free_shipping: item.shipping?.free_shipping || false,
+        sold_quantity: item.sold_quantity,
+        description: item.description,
+      };
+
+      break;
+
+    case 'list':
+      itemAux = {
+        id: item.id || '',
+        title: item.title || '',
+        price: {
+          currency: item.currency_id || '',
+          amount: priceInteger,
+          decimals: priceDecimalPart,
+        },
+        picture: proccessThumbnail(item.thumbnail) || '',
+        condition: item.condition || '',
+        free_shipping: item.shipping?.free_shipping || false,
+      };
+      break;
+
+    default:
+      break;
+  }
+  return itemAux;
 };
 
 export const createResponseObject = (action, payload) => {
@@ -37,15 +67,13 @@ export const createResponseObject = (action, payload) => {
         categories = categoryFilter.values[0]?.path_from_root?.map((pfr) => pfr.name);
       }
 
-      items = payload.results?.map((r) => getItemData(r));
+      items = payload.results?.map((r) => getItemData(r, action));
       responseObject.categories = categories;
       responseObject.items = items;
       break;
 
     case 'get':
-      item = getItemData(payload);
-      item.sold_quantity = payload.sold_quantity;
-      item.description = payload.description;
+      item = getItemData(payload, action);
       responseObject.item = { ...item };
       break;
 
