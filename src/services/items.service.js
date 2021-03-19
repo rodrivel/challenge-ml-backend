@@ -32,12 +32,12 @@ const getItemData = (item, action) => {
           amount: priceInteger,
           decimals: priceDecimalPart,
         },
-        pictures: item.pictures.map((p) => ({ ...p, secure_url: proccessThumbnail(p.secure_url, 'C') })) || [],
+        pictures: item.pictures.map((p) => ({ ...p, secure_url: proccessThumbnail(p.secure_url, 'F') })) || [],
         condition: proccessItemCondition(item.condition) || '',
         free_shipping: item.shipping?.free_shipping || false,
         sold_quantity: item.sold_quantity || 0,
-        description: item.description,
-        categories: item.categories,
+        description: item.description || '',
+        categories: item.categories || [],
       };
 
       break;
@@ -106,15 +106,15 @@ export const listItemsService = (q) => axios.get(`https://api.mercadolibre.com/s
 
 export const getItemService = async (id) => {
   // get main data
-  const mainData = await axios.get(`https://api.mercadolibre.com/items/${id}`).then((response) => response.data).catch((error) => { throw error; });
+  const mainData = await axios.get(`https://api.mercadolibre.com/items/${id}`).then((response) => response.data).catch(console.log);
   // get categories
-  const categories = await axios.get(`https://api.mercadolibre.com/categories/${mainData.category_id}`).then((response) => response.data).catch((error) => { throw error; });
+  const categories = await axios.get(`https://api.mercadolibre.com/categories/${mainData.category_id}`).then((response) => response.data).catch(console.log);
   // get description
-  const description = await axios.get(`https://api.mercadolibre.com/items/${id}/description/`).then((response) => response.data).catch((error) => { throw error; });
+  const description = await axios.get(`https://api.mercadolibre.com/items/${id}/description/`).then((response) => response.data).catch(console.log);
 
   const itemData = {
     ...mainData,
-    description: description.plain_text,
+    description: description?.plain_text,
     categories: categories.path_from_root?.map((pfr) => pfr.name),
   };
 
