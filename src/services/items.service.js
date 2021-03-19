@@ -104,14 +104,13 @@ export const listItemsService = (q) => axios.get(`https://api.mercadolibre.com/s
   .then((response) => response.data)
   .catch((error) => { throw error; });
 
-
 export const getItemService = async (id) => {
   // get main data
-  const mainData = await axios.get(`https://api.mercadolibre.com/items/${id}`).then((response) => response.data);
+  const mainData = await axios.get(`https://api.mercadolibre.com/items/${id}`).then((response) => response.data).catch((error) => { throw error; });
   // get categories
-  const categories = await axios.get(`https://api.mercadolibre.com/categories/${mainData.category_id}`).then((response) => response.data);
+  const categories = await axios.get(`https://api.mercadolibre.com/categories/${mainData.category_id}`).then((response) => response.data).catch((error) => { throw error; });
   // get description
-  const description = await axios.get(`https://api.mercadolibre.com/items/${id}/description/`).then((response) => response.data);
+  const description = await axios.get(`https://api.mercadolibre.com/items/${id}/description/`).then((response) => response.data).catch((error) => { throw error; });
 
   const itemData = {
     ...mainData,
