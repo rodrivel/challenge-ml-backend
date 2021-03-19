@@ -37,6 +37,7 @@ const getItemData = (item, action) => {
         free_shipping: item.shipping?.free_shipping || false,
         sold_quantity: item.sold_quantity || 0,
         description: item.description,
+        categories: item.categories,
       };
 
       break;
@@ -103,21 +104,22 @@ export const listItemsService = (q) => axios.get(`https://api.mercadolibre.com/s
   .then((response) => response.data)
   .catch((error) => { throw error; });
 
-export const getItemService = (id) => {
-  const requestItem = axios.get(`https://api.mercadolibre.com/items/${id}`);
-  const requestItemDescription = axios.get(`https://api.mercadolibre.com/items/${id}/description/`);
 
-  return axios.all([requestItem, requestItemDescription])
-    .then(axios.spread((...responses) => {
-      const responseItem = responses[0];
-      const responseItemDescription = responses[1];
-      const dataWithDescription = {
-        ...responseItem.data,
-        description: responseItemDescription.data.plain_text,
-      };
-      return dataWithDescription;
-    }))
-    .catch((error) => { throw error; });
+export const getItemService = async (id) => {
+  // get main data
+  const mainData = await axios.get(`https://api.mercadolibre.com/items/${id}`).then((response) => response.data);
+  // get categories
+  const categories = await axios.get(`https://api.mercadolibre.com/categories/${mainData.category_id}`).then((response) => response.data);
+  // get description
+  const description = await axios.get(`https://api.mercadolibre.com/items/${id}/description/`).then((response) => response.data);
+
+  const itemData = {
+    ...mainData,
+    description: description.plain_text,
+    categories: categories.path_from_root?.map((pfr) => pfr.name),
+  };
+
+  return itemData;
 };
 
 export class ResponseService {
