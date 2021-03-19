@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { GET_ITEMS_API_MAX_RESULTS } from '../variables';
 
-const proccessThumbnail = (thumbnail) => (thumbnail ? thumbnail.replace(/(-[A-Z])(\.\w{3,4})$/, '-C$2') : null);
+const proccessThumbnail = (thumbnail, sizeId) => (thumbnail ? thumbnail.replace(/(-[A-Z])(\.\w{3,4})$/, `-${sizeId}$2`) : null);
 const proccessItemCondition = (itemCondition) => {
   let res;
   switch (itemCondition) {
@@ -32,10 +32,10 @@ const getItemData = (item, action) => {
           amount: priceInteger,
           decimals: priceDecimalPart,
         },
-        pictures: item.pictures || {},
+        pictures: item.pictures.map((p) => ({ ...p, secure_url: proccessThumbnail(p.secure_url, 'C') })) || [],
         condition: proccessItemCondition(item.condition) || '',
         free_shipping: item.shipping?.free_shipping || false,
-        sold_quantity: item.sold_quantity,
+        sold_quantity: item.sold_quantity || 0,
         description: item.description,
       };
 
@@ -50,7 +50,7 @@ const getItemData = (item, action) => {
           amount: priceInteger,
           decimals: priceDecimalPart,
         },
-        picture: proccessThumbnail(item.thumbnail) || '',
+        picture: proccessThumbnail(item.thumbnail, 'T') || '',
         condition: proccessItemCondition(item.condition) || '',
         free_shipping: item.shipping?.free_shipping || false,
         address: item.address || null,
