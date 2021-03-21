@@ -43,7 +43,7 @@ npm run test
 
 ## API DOCS
 
-You can interact with the API in the next url: /api-docs/
+You can interact with the API [here](http://localhost:5000/api-docs/)
 
 ### Need to regenerate docs due to changes on it definitions?
 ```sh
