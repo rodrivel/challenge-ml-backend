@@ -32,7 +32,7 @@ const getItemData = (item, action) => {
           amount: priceInteger,
           decimals: priceDecimalPart,
         },
-        pictures: item.pictures.map((p) => ({ ...p, secure_url: proccessThumbnail(p.secure_url, 'F') })) || [],
+        pictures: item.pictures.map((p) => ({ ...p, secure_url: proccessThumbnail(p.secure_url, 'B') })) || [],
         condition: proccessItemCondition(item.condition) || '',
         free_shipping: item.shipping?.free_shipping || false,
         sold_quantity: item.sold_quantity || 0,
@@ -51,7 +51,7 @@ const getItemData = (item, action) => {
           amount: priceInteger,
           decimals: priceDecimalPart,
         },
-        picture: proccessThumbnail(item.thumbnail, 'T') || '',
+        picture: proccessThumbnail(item.thumbnail, 'N') || '',
         condition: proccessItemCondition(item.condition) || '',
         free_shipping: item.shipping?.free_shipping || false,
         address: item.address || null,
@@ -115,7 +115,7 @@ export const getItemService = async (id) => {
   const itemData = {
     ...mainData,
     description: description?.plain_text,
-    categories: categories.path_from_root?.map((pfr) => pfr.name),
+    categories: categories?.path_from_root?.map((pfr) => pfr.name),
   };
 
   return itemData;
