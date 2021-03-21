@@ -32,7 +32,7 @@ const getItemData = (item, action) => {
           amount: priceInteger,
           decimals: priceDecimalPart,
         },
-        pictures: item.pictures.map((p) => ({ ...p, secure_url: proccessThumbnail(p.secure_url, 'B') })) || [],
+        pictures: item.pictures ? item.pictures.map((p) => ({ ...p, secure_url: proccessThumbnail(p.secure_url, 'B') })) : [],
         condition: proccessItemCondition(item.condition) || '',
         free_shipping: item.shipping?.free_shipping || false,
         sold_quantity: item.sold_quantity || 0,
